@@ -9,6 +9,11 @@ namespace TABGPatcher.TABG
 {
     public class Equ8Patch : TABGPatch
     {
+
+        public Equ8Patch() : base("EQU8")
+        {
+        }
+
         public override bool Patch(ModuleDefMD assemblyCSharp, ModuleDefMD assemblyCSharpFirstpass)
         {
             logger.Log("Getting all types...");
@@ -19,7 +24,7 @@ namespace TABGPatcher.TABG
             var equ8Types = FindEquTypes(types);
             if (equ8Types.Length == 0)
             {
-                logger.Error("Could not find any types that use the equ8-methods");
+                logger.Error("Could not find any types in the equ8-namespace");
                 return false;
             }
             logger.Log(" -> Found {0}", string.Join(", ", equ8Types.Select(x => x.FullName).ToArray()));
@@ -48,6 +53,7 @@ namespace TABGPatcher.TABG
             "gg_client_establish_session",
             "gg_client_initialize"
         };
+
         private TypeDef[] FindEquTypes(TypeDef[] types)
         {
             var equTypes = types.Where(x => x.Namespace == "equ8");
@@ -68,12 +74,6 @@ namespace TABGPatcher.TABG
                 .SelectMany(x => x.Methods)
                 .Where(x => x.HasBody)
                 .Where(x => x.Body.Instructions.Any(i => i.Operand != null && i.Operand is MethodDef && equ8Types.Contains(((MethodDef)i.Operand).DeclaringType))).ToArray();
-        }
-        private void StripInstructions(MethodDef method)
-        {
-            var body = new dnlib.DotNet.Emit.CilBody();
-            body.Instructions.Add(new dnlib.DotNet.Emit.Instruction(dnlib.DotNet.Emit.OpCodes.Ret));
-            method.Body = body;
         }
     }
 }

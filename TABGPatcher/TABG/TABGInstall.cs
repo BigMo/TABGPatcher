@@ -23,7 +23,8 @@ namespace TABGPatcher.TABG
         private FileInfo[] allAssemblies;
         private TABGPatch[] patches = new TABGPatch[]
         {
-            new Equ8Patch()
+            new Equ8Patch(),
+            new CodeStageACPatch()
         };
 
         private static string GetSubfolder(string parent, string sub)

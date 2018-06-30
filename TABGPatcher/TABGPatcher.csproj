@@ -53,6 +53,7 @@
     <Compile Include="Steam\AppState.cs" />
     <Compile Include="Steam\SteamLibrary.cs" />
     <Compile Include="Steam\SteamManager.cs" />
+    <Compile Include="TABG\CodeStageACPatch.cs" />
     <Compile Include="TABG\Equ8Patch.cs" />
     <Compile Include="TABG\TABGPatch.cs" />
     <Compile Include="TABG\TABGInstall.cs" />

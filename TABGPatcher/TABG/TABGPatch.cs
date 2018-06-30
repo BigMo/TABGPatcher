@@ -9,14 +9,22 @@ namespace TABGPatcher.TABG
 {
     public abstract class TABGPatch
     {
-        public string Name { get { return GetType().Name; } }
+        public string Name { get; private set; }
         protected CrapLogger logger;
 
-        protected TABGPatch()
+        protected TABGPatch(string name)
         {
+            Name = name;
             logger = new CrapLogger(Name);
         }
 
         public abstract bool Patch(ModuleDefMD assemblyCSharp, ModuleDefMD assemblyCSharpFirstpass);
+
+        protected void StripInstructions(MethodDef method)
+        {
+            var body = new dnlib.DotNet.Emit.CilBody();
+            body.Instructions.Add(new dnlib.DotNet.Emit.Instruction(dnlib.DotNet.Emit.OpCodes.Ret));
+            method.Body = body;
+        }
     }
 }
