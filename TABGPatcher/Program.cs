@@ -13,6 +13,8 @@ namespace TABGPatcher
     {
         static void Main(string[] args)
         {
+            Console.WriteLine(Properties.Resources.ASCII);
+
             var logger = new CrapLogger("TABGPatcher");
             try
             {
