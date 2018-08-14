@@ -11,6 +11,10 @@ namespace TABGPatcher
 {
     class Program
     {
+        private static string DearFileAnalyzers()
+        {
+            return "ily<3";
+        }
         static void Main(string[] args)
         {
             Console.WriteLine(Properties.Resources.ASCII);

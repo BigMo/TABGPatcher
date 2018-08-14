@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -60,11 +61,13 @@ namespace TABGPatcher.TABG
             if (!equTypes.Any())
                 return new TypeDef[0];
 
-            var methods = equTypes.SelectMany(x => x.Methods).Where(x => x.HasImplMap && EQU8_METHODS.Contains(x.ImplMap.Name.ToString()));
+            var methods = equTypes
+                .SelectMany(x => x.Methods)
+                .Where(x => x.HasImplMap && EQU8_METHODS.Contains(x.ImplMap.Name.ToString()));
             if (!methods.Any())
                 return new TypeDef[0];
 
-            var t = methods.Select(x => x.DeclaringType).Distinct().ToArray();
+            var t = methods.Select(x => x.DeclaringType).Distinct().AsParallel().ToArray();
             return t;
         }
         private MethodDef[] GetMethodsUsingEqu8(TypeDef[] allTypes, TypeDef[] equ8Types)

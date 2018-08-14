@@ -36,11 +36,14 @@ namespace TABGPatcher.Steam
             if (File.Exists(vdf))
             {
                 var libs = new VDFFile(vdf);
-                foreach (var e in libs["LibraryFolders"].Children)
+                if (libs.RootElements.Count > 0 && libs.RootElements.Any(x => x.Name == "LibraryFolders"))
                 {
-                    int id = 0;
-                    if (int.TryParse(e.Name, out id))
-                        dirs.Add(new SteamLibrary(id, e.Value.Replace(@"\\", @"\")));
+                    foreach (var e in libs["LibraryFolders"].Children)
+                    {
+                        int id = 0;
+                        if (int.TryParse(e.Name, out id))
+                            dirs.Add(new SteamLibrary(id, e.Value.Replace(@"\\", @"\")));
+                    }
                 }
             }
             SteamLibraries = dirs.ToArray();

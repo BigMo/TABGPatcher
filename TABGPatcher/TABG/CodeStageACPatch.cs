@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -49,7 +50,7 @@ namespace TABGPatcher.TABG
 
         private TypeDef[] FindCodeStageDetectorTypes(TypeDef[] types)
         {
-            var csacTypes = types.Where(x => x.Namespace == CSAC_NAMESPACE && !x.IsAbstract);
+            var csacTypes = types.Where(x => x.Namespace == CSAC_NAMESPACE && !x.IsAbstract).AsParallel();
             if (!csacTypes.Any())
                 return new TypeDef[0];
             return csacTypes.ToArray();
@@ -57,7 +58,8 @@ namespace TABGPatcher.TABG
 
         private MethodDef[] FindVoidMethods(TypeDef[] types)
         {
-            var methods = types.Where(x => x.HasMethods)
+            var methods = types
+                .Where(x => x.HasMethods)
                 .SelectMany(x => x.Methods)
                 .Where(x => !x.IsAbstract && !x.IsVirtual && x.ReturnType.TypeName == "Void" && x.HasBody && x.Body.HasInstructions && x.Body.Instructions.Count > 1);
             if (!methods.Any())
