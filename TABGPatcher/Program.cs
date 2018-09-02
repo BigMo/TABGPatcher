@@ -44,8 +44,8 @@ namespace TABGPatcher
         {
             logger.Log("Trying to automatically detect TABG directory...");
             var tabg = GetFromDisk();
-            //if (tabg != null)
-            //    return tabg;
+            if (tabg != null)
+                return tabg;
             logger.Log("Trying to get TABG directory from user...");
             return GetFromInput();
         }
